@@ -35,6 +35,9 @@ To accomplish goal #1, we only use the metadata when it is required.
 ### Getting Started
 
 Collect All of the Logs!
+
+OneClick Launch:
+
 ```
 .\Gather-LogsToTimeLine.ps1 -output "c:\Logs"
 

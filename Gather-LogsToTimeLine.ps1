@@ -124,3 +124,9 @@ if ($IncludeAllEvtxFiles) {
 }
 
 write-host "Completed the log gathering. Launching the Parser"
+
+Set-Location C:\Temp\GatherLogs
+
+$MachineName = $env:computername
+
+.\Parse-LogsToTimeLine.ps1 -LogFolder "C:\Temp\GatherLogs\Logs" -outputfile LogsTimeline_$MachineName.csv
