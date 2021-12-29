@@ -68,16 +68,16 @@ if ((Test-Admin) -eq $false) {
     exit
 }
 
-Write-Verbose "Checking For Output Directory"
+write-host "Checking For Output Directory"
 if (!(test-path $output)) {
-Write-Verbose "Creating Output Directory $output"
+write-host "Creating Output Directory $output"
     mkdir $output | Out-Null
 }
 
 if ($excludeEvtxFiles) {
     $excludeEvtxFiles | ForEach-Object {
         $LogName = "$LogTag-" + $_
-        Write-Verbose "Dumping $_ Event Log to CSV"
+        write-host "Dumping $_ Event Log to CSV"
         Try {
             Get-EventLog $_ -ErrorAction Stop |
                 select @{name="containerLog";expression={$LogName}},
@@ -93,29 +93,29 @@ if ($excludeEvtxFiles) {
                Export-Csv -NoTypeInformation ($output + "\" + "$LogTag-" + $_ + ".csv")
         }
         Catch {
-            Write-Verbose "Previous Log doesn't have any records. No output will be produced"
+            write-host "Previous Log doesn't have any records. No output will be produced"
         }
         
     }
 }
-Write-Verbose "Dump All Operational Logs Event Log With Tag: $logtag Excluding: $excludeEvtxFiles"
+write-host "Dump All Operational Logs Event Log With Tag: $logtag Excluding: $excludeEvtxFiles"
 
 Get-WinEvent -ListLog * | where-object {$_.recordcount -gt 0} | where-object {$excludeEvtxFiles -notcontains $_.LogName} |
 ForEach-Object {
     wevtutil epl $_.LogName  ($output + "\" + "$LogTag-" + ($_.LogName -replace "/","%4") +".evtx")
 }
 
-Write-Verbose "Adding Event Context to exported evtx files"
+write-host "Adding Event Context to exported evtx files"
 Get-ChildItem $output\*.evtx | ForEach-Object {
     wevtutil archive-log $_ /l:en-us
 }
 
 if ($IncludeAllEvtxFiles) {
-    Write-Verbose "Gathering Evtx Files for all previously excluded files"
+    write-host "Gathering Evtx Files for all previously excluded files"
     $excludeEvtxFiles | ForEach-Object {
         wevtutil epl $_ ($output + "\" + "$LogTag-" + ($_ -replace "/","%4") +".evtx")
     }
-    Write-Verbose "Adding Event Context to previously excluded files"
+    write-host "Adding Event Context to previously excluded files"
     $excludeEvtxFiles | foreach-object {
         Get-ChildItem ($output +"\" + $LogTag + "-" + $_ + ".evtx") | ForEach-Object {
             wevtutil archive-log $_ /l:en-us
@@ -123,5 +123,4 @@ if ($IncludeAllEvtxFiles) {
     }
 }
 
-
-
+write-host "Completed the log gathering. Launching the Parser"

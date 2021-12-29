@@ -1,7 +1,6 @@
-
 :: Quickly and quietly run both scripts to gather and parse logs
 :: Download and run the scripts directly from GitHub
-:: Created by: Alex Ivantsov & PieSecurity (https://github.com/piesecurity)
+:: Created by: PieSecurity (https://github.com/piesecurity) & Alex Ivantsov 
 
 @echo off
 
@@ -37,10 +36,10 @@
     PowerShell -executionpolicy bypass -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/Exploitacious/WindowsEventsToCSVTimeline/master/Parse-LogsToTimeLine.ps1', 'Parse-LogsToTimeLine.ps1')"
 
 
-
-:: Start Running the SYSTEM DEBLOAT scripts
+:: Start Running the Gather Logs scripts
 :RunScript
 
-    SET ThisScriptsDirectory=%~dp0
-    SET PowerShellScriptPath=%ThisScriptsDirectory%Gather-LogsToTimeLine -output "C:\Temp\GatherLogs"
-    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%'";
+    SET ScriptDirectory=C:\Temp\GatherLogs\
+    SET PowerShellScriptPath=%ScriptDirectory%Gather-LogsToTimeLine.ps1
+
+    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "%PowerShellScriptPath%";
