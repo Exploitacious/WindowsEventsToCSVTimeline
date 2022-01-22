@@ -41,5 +41,4 @@
 
     SET ScriptDirectory=C:\Temp\GatherLogs\
     SET PowerShellScriptPath=%ScriptDirectory%Gather-LogsToTimeLine.ps1
-
     PowerShell -NoProfile -ExecutionPolicy Bypass -Command "%PowerShellScriptPath%";
